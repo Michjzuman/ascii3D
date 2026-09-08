@@ -68,6 +68,7 @@ void take_photo(Photo *photo, const Camera *cam, const World *world) {
         for (U32 y = 0; y < photo->h; y++) {
             double next_dis = DBL_MAX;
             U8 color = 1;
+            U8 palette = 0;
             for (U32 i = 0; i < world->triangle_count; i++) {
                 Triangle *tri = &world->triangles[i];
                 double sx = ((double)x + 0.5) - (double)photo->w / 2.0;
@@ -78,13 +79,24 @@ void take_photo(Photo *photo, const Camera *cam, const World *world) {
                 if (dis >= 0 && dis < next_dis) {
                     next_dis = dis;
                     color = tri->color;
+                    palette = tri->palette;
                 }
             }
             U8 value = (U8)next_dis;
-            if (next_dis < 0) value = 0;
-            if (next_dis > 255.0) value = 255;
-            photo->pic[y][x].value = value;
-            photo->pic[y][x].color = color;
+            Pixel *pixel = &photo->pic[y][x];
+            if (next_dis < 0) {
+                pixel->value = 0;
+                pixel->color = 0;
+                pixel->palette = 0;
+            } else if (next_dis >= 255.0) {
+                pixel->value = 255;
+                pixel->color = 4;
+                pixel->palette = 0;
+            } else {
+                pixel->value = value;
+                pixel->color = color;
+                pixel->palette = palette;
+            }
         }
     }
 }

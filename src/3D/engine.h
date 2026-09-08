@@ -18,6 +18,7 @@ typedef struct {
 } World;
 
 World init_world(void);
+void free_world(World *);
 
 void add_body(World *, const Triangle *triangles, const U32 triangle_count);
 

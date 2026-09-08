@@ -4,8 +4,7 @@
 #include "util.h"
 
 typedef struct {
-    U8 value;
-    U8 color;
+    U8 value, color, palette;
 } Pixel;
 
 typedef struct {

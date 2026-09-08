@@ -16,7 +16,7 @@ int main() {
     add_body(&world, CUBE_BODY(150.0f, 0.0f, 0.0f, 10.0f), 12);
     add_body(&world, CUBE_BODY(10.0f, 10.0f, 0.0f, 5.0f), 12);
     add_body(&world, CUBE_BODY(10.0f, -15.0f, 0.0f, 12.0f), 12);
-    add_body(&world, CUBE_BODY(10.0f, -15.0f, 20.0f, 30.0f), 12);
+    add_body(&world, CUBE_BODY(10.0f, -15.0f, 20.0f, 12.0f), 12);
     
     Photo photo = init_photo(ascii_w(), ascii_h());
     

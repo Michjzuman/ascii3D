@@ -9,6 +9,17 @@ World init_world() {
     return world;
 }
 
+void free_world(World *world) {
+    for (U32 i = 0; i < world->triangle_count; i++) {
+        P *corners[] = {
+            world->triangles[i].A, world->triangles[i].B, world->triangles[i].C
+        };
+        for (U32 c = 0; c < 3; c++) {
+            // todo
+        }
+    }
+}
+
 void add_body(World *world, const Triangle *triangles, const U32 triangle_count) {
     world->triangles = realloc(
         world->triangles,

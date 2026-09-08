@@ -16,10 +16,10 @@ Triangle *create_cube_body(Triangle *tri, double x, double y, double z, double s
     c[bab] = (P){x + s, y, z + s};
 
     tri[0] = (Triangle){&c[aaa], &c[aba], &c[baa], BLUE};
-    tri[1] = (Triangle){&c[bba], &c[aba], &c[baa], GREEN};
+    tri[1] = (Triangle){&c[bba], &c[aba], &c[baa], GREEN, 2};
     tri[2] = (Triangle){&c[aab], &c[abb], &c[bab], BLUE};
     tri[3] = (Triangle){&c[bbb], &c[abb], &c[bab], YELLOW};
-    tri[4] = (Triangle){&c[aaa], &c[aab], &c[abb], WHITE};
+    tri[4] = (Triangle){&c[aaa], &c[aab], &c[abb], WHITE, 1};
     tri[5] = (Triangle){&c[aaa], &c[aba], &c[abb], RED};
     tri[6] = (Triangle){&c[baa], &c[bab], &c[bbb], GREEN};
     tri[7] = (Triangle){&c[baa], &c[bba], &c[bbb], BLUE};

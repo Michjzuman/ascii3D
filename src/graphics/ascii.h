@@ -5,7 +5,15 @@
 
 #define FPS 60
 
-typedef struct {char ch; U8 value;} Letter;
+typedef struct {
+    char ch;
+    U8 value;
+} Letter;
+
+typedef struct {
+    Letter *letters;
+    U8 count;
+} Palette;
 
 void init_ascii(void);
 void draw_ascii(const Photo *, Camera *);
