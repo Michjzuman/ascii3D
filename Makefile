@@ -1,2 +1,2 @@
-ascii3D: *.c
-	clang *.c -l ncurses -o ascii3D -g -O0
+ascii3D: src/*.c
+	clang $(shell find src -type f -name '*.c') -l ncurses -I src -o ascii3D -g -O0

@@ -1,6 +1,6 @@
 #include <ncurses.h>
 
-#include "colors.h"
+#include "graphics/colors.h"
 
 void init_colors() {
     init_pair(BLACK, COLOR_MAGENTA, COLOR_BLACK);

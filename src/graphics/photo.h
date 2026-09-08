@@ -1,7 +1,7 @@
 #ifndef PHOTO_H
 #define PHOTO_H
 
-#include "types.h"
+#include "util.h"
 
 typedef struct {
     U8 value;
@@ -11,9 +11,9 @@ typedef struct {
 typedef struct {
     U32 w, h;
     Pixel **pic;
-    float fov;
 } Photo;
 
-Photo init_photo(double fov);
+Photo init_photo(U32 w, U32 h);
+void free_photo(Photo *);
 
 #endif

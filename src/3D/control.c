@@ -1,7 +1,9 @@
 #include <ncurses.h>
 #include <math.h>
 
-#include "3D.h"
+#include "3D/camera.h"
+
+#define drift 0.82
 
 bool control_cam(Camera *cam) {
     switch (getch()) {
@@ -26,8 +28,8 @@ bool control_cam(Camera *cam) {
             break;
         case 'w': cam->vel.y--; break;
         case 's': cam->vel.y++; break;
-        case 'a': cam->vel.xz -= 0.05; break;
-        case 'd': cam->vel.xz += 0.05; break;
+        case 'a': cam->vel.yaw -= 0.05; break;
+        case 'd': cam->vel.yaw += 0.05; break;
         /*
         case 'a': cam->dz -= 0.5f; break;
         case 'd': cam->dz += 0.5f; break;
@@ -37,18 +39,19 @@ bool control_cam(Camera *cam) {
         cam->pos.x += cam->vel.x;
         cam->pos.y += cam->vel.y;
         cam->pos.z += cam->vel.z;
-        double dx = cam->pos.dx;
-        double dz = cam->pos.dz;
-        double a = cam->vel.xz;
-        cam->pos.dx = dx * cos(a) - dz * sin(a);
-        cam->pos.dz = dx * sin(a) + dz * cos(a);
+        {
+            double dx = cam->pos.dx;
+            double dz = cam->pos.dz;
+            double a = cam->vel.yaw;
+            cam->pos.dx = dx * cos(a) - dz * sin(a);
+            cam->pos.dz = dx * sin(a) + dz * cos(a);
+        }
     }
     {
-        double drift = 0.82;
         cam->vel.x *= drift;
         cam->vel.y *= drift;
         cam->vel.z *= drift;
-        cam->vel.xz *= drift;
+        cam->vel.yaw *= drift;
     }
     return true;
 }

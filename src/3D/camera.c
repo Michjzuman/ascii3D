@@ -3,35 +3,16 @@
 #define PI 3.14159265358979323846
 #define EPSILON 0.000001
 
-#include "types.h"
-
-#include "3D.h"
-
-World init_world() {
-    World world;
-    world.triangle_count = 0;
-    world.triangles = malloc(0);
-    return world;
-}
+#include "graphics/ascii.h"
+#include "3D/camera.h"
 
 Camera init_cam() {
     Camera cam;
     cam.vel.x = 0.0f;
     cam.vel.y = 0.0f;
     cam.vel.z = 0.0f;
-    cam.vel.xz = 0.0f;
+    cam.vel.yaw = 0.0f;
     return cam;
-}
-
-void add_body(World *world, const Triangle *triangles, const U32 triangle_count) {
-    world->triangles = realloc(
-        world->triangles,
-        (world->triangle_count + triangle_count) * sizeof(Triangle)
-    );
-    for (U32 i = 0; i < triangle_count; i++) {
-        world->triangles[world->triangle_count + i] = triangles[i];
-    }
-    world->triangle_count += triangle_count;
 }
 
 static double get_distance(const Camera *cam, const Triangle *tri, double dx, double dy) {
@@ -86,13 +67,13 @@ void take_photo(Photo *photo, const Camera *cam, const World *world) {
     for (U32 x = 0; x < photo->w; x++) {
         for (U32 y = 0; y < photo->h; y++) {
             double next_dis = DBL_MAX;
-            U8 color = BLACK;
+            U8 color = 1;
             for (U32 i = 0; i < world->triangle_count; i++) {
                 Triangle *tri = &world->triangles[i];
                 double sx = ((double)x + 0.5) - (double)photo->w / 2.0;
                 double sy = (((double)y + 0.5) - (double)photo->h / 2.0) * 2.0;
-                double dx = yaw + atan(sx / photo->fov);
-                double dy = pitch + atan(sy / photo->fov);
+                double dx = yaw + atan(sx / cam->pos.fov);
+                double dy = pitch + atan(sy / cam->pos.fov);
                 double dis = get_distance(cam, tri, dx, dy);
                 if (dis >= 0 && dis < next_dis) {
                     next_dis = dis;
@@ -107,5 +88,3 @@ void take_photo(Photo *photo, const Camera *cam, const World *world) {
         }
     }
 }
-
-
