@@ -20,14 +20,14 @@ int main() {
     
     Photo photo = init_photo(ascii_w(), ascii_h());
     
-    Camera cam;
+    Camera cam = init_cam();
     cam.pos.x = -40.0f;
     cam.pos.y = 5.0f;
     cam.pos.z = 5.0f;
     cam.pos.dx = 1.0f;
     cam.pos.dy = 0.0f;
     cam.pos.dz = 0.0f;
-    cam.pos.fov = 500.0f;
+    cam.pos.fov = 200.0f;
 
     while (control_cam(&cam)) {
         take_photo(&photo, &cam, &world);

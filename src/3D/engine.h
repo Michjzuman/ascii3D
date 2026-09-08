@@ -8,7 +8,7 @@ typedef struct {
 } P;
 
 typedef struct {
-    P A, B, C;
+    P *A, *B, *C;
     U8 color, palette;
 } Triangle;
 

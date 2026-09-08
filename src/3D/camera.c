@@ -22,13 +22,13 @@ static double get_distance(const Camera *cam, const Triangle *tri, double dx, do
     dir.z = cosf(dy) * sinf(dx);
 
     P kat1;
-    kat1.x = tri->B.x - tri->A.x;
-    kat1.y = tri->B.y - tri->A.y;
-    kat1.z = tri->B.z - tri->A.z;
+    kat1.x = tri->B->x - tri->A->x;
+    kat1.y = tri->B->y - tri->A->y;
+    kat1.z = tri->B->z - tri->A->z;
     P kat2;
-    kat2.x = tri->C.x - tri->A.x;
-    kat2.y = tri->C.y - tri->A.y;
-    kat2.z = tri->C.z - tri->A.z;
+    kat2.x = tri->C->x - tri->A->x;
+    kat2.y = tri->C->y - tri->A->y;
+    kat2.z = tri->C->z - tri->A->z;
     P hyp;
     hyp.x = dir.y * kat2.z - dir.z * kat2.y;
     hyp.y = dir.z * kat2.x - dir.x * kat2.z;
@@ -40,9 +40,9 @@ static double get_distance(const Camera *cam, const Triangle *tri, double dx, do
     double f = 1.0f / det;
 
     P s;
-    s.x = cam->pos.x - tri->A.x;
-    s.y = cam->pos.y - tri->A.y;
-    s.z = cam->pos.z - tri->A.z;
+    s.x = cam->pos.x - tri->A->x;
+    s.y = cam->pos.y - tri->A->y;
+    s.z = cam->pos.z - tri->A->z;
 
     double u = f * (s.x * hyp.x + s.y * hyp.y + s.z * hyp.z);
     if (u < 0.0f || u > 1.0f) return  -1.0;

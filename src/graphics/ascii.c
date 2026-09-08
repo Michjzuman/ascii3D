@@ -5,8 +5,6 @@
 #include "graphics/colors.h"
 #include "graphics/photo.h"
 
-#define FPS 60
-
 Letter letters[] = {
     {' ', 0},
     {'\'', 37},

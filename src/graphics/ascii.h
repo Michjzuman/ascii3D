@@ -3,6 +3,8 @@
 
 #include "3D/camera.h"
 
+#define FPS 60
+
 typedef struct {char ch; U8 value;} Letter;
 
 void init_ascii(void);
