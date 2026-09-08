@@ -14,6 +14,15 @@ World init_world() {
     return world;
 }
 
+Camera init_cam() {
+    Camera cam;
+    cam.vel.x = 0.0f;
+    cam.vel.y = 0.0f;
+    cam.vel.z = 0.0f;
+    cam.vel.xz = 0.0f;
+    return cam;
+}
+
 void add_body(World *world, const Triangle *triangles, const U32 triangle_count) {
     world->triangles = realloc(
         world->triangles,
@@ -50,9 +59,9 @@ static double get_distance(const Camera *cam, const Triangle *tri, double dx, do
     double f = 1.0f / det;
 
     P s;
-    s.x = cam->x - tri->A.x;
-    s.y = cam->y - tri->A.y;
-    s.z = cam->z - tri->A.z;
+    s.x = cam->pos.x - tri->A.x;
+    s.y = cam->pos.y - tri->A.y;
+    s.z = cam->pos.z - tri->A.z;
 
     double u = f * (s.x * hyp.x + s.y * hyp.y + s.z * hyp.z);
     if (u < 0.0f || u > 1.0f) return  -1.0;
@@ -72,16 +81,16 @@ static double get_distance(const Camera *cam, const Triangle *tri, double dx, do
 }
 
 void take_photo(Photo *photo, const Camera *cam, const World *world) {
-    double yaw = atan2(cam->dz, cam->dx);
-    double pitch = atan2(cam->dy, hypot(cam->dx, cam->dz));
+    double yaw = atan2(cam->pos.dz, cam->pos.dx);
+    double pitch = atan2(cam->pos.dy, hypot(cam->pos.dx, cam->pos.dz));
     for (U32 x = 0; x < photo->w; x++) {
         for (U32 y = 0; y < photo->h; y++) {
             double next_dis = DBL_MAX;
-            U8 color;
+            U8 color = BLACK;
             for (U32 i = 0; i < world->triangle_count; i++) {
                 Triangle *tri = &world->triangles[i];
                 double sx = ((double)x + 0.5) - (double)photo->w / 2.0;
-                double sy = ((double)y + 0.5) - (double)photo->h / 2.0;
+                double sy = (((double)y + 0.5) - (double)photo->h / 2.0) * 2.0;
                 double dx = yaw + atan(sx / photo->fov);
                 double dy = pitch + atan(sy / photo->fov);
                 double dis = get_distance(cam, tri, dx, dy);

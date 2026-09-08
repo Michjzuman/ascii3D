@@ -3,6 +3,6 @@
 
 #include "3D.h"
 
-bool control_cam(Camera *);
+bool control_cam(Camera *cam);
 
 #endif
