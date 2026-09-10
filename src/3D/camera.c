@@ -15,20 +15,22 @@ Camera init_cam() {
     return cam;
 }
 
-static double get_distance(const Camera *cam, const Triangle *tri, double dx, double dy) {
+static double get_distance(const Camera *cam, const World *world, const Triangle *tri, double dx, double dy) {
     P dir;
     dir.x = cosf(dy) * cosf(dx);
     dir.y = sinf(dy);
     dir.z = cosf(dy) * sinf(dx);
 
+    P *c = world->corners.list;
+
     P kat1;
-    kat1.x = tri->B->x - tri->A->x;
-    kat1.y = tri->B->y - tri->A->y;
-    kat1.z = tri->B->z - tri->A->z;
+    kat1.x = c[tri->B].x - c[tri->A].x;
+    kat1.y = c[tri->B].y - c[tri->A].y;
+    kat1.z = c[tri->B].z - c[tri->A].z;
     P kat2;
-    kat2.x = tri->C->x - tri->A->x;
-    kat2.y = tri->C->y - tri->A->y;
-    kat2.z = tri->C->z - tri->A->z;
+    kat2.x = c[tri->C].x - c[tri->A].x;
+    kat2.y = c[tri->C].y - c[tri->A].y;
+    kat2.z = c[tri->C].z - c[tri->A].z;
     P hyp;
     hyp.x = dir.y * kat2.z - dir.z * kat2.y;
     hyp.y = dir.z * kat2.x - dir.x * kat2.z;
@@ -40,9 +42,9 @@ static double get_distance(const Camera *cam, const Triangle *tri, double dx, do
     double f = 1.0f / det;
 
     P s;
-    s.x = cam->pos.x - tri->A->x;
-    s.y = cam->pos.y - tri->A->y;
-    s.z = cam->pos.z - tri->A->z;
+    s.x = cam->pos.x - c[tri->A].x;
+    s.y = cam->pos.y - c[tri->A].y;
+    s.z = cam->pos.z - c[tri->A].z;
 
     double u = f * (s.x * hyp.x + s.y * hyp.y + s.z * hyp.z);
     if (u < 0.0f || u > 1.0f) return  -1.0;
@@ -68,18 +70,18 @@ void take_photo(Photo *photo, const Camera *cam, const World *world) {
         for (U32 y = 0; y < photo->h; y++) {
             double next_dis = DBL_MAX;
             U8 color = 1;
-            U8 palette = 0;
+            U8 texture = 0;
             for (U32 i = 0; i < world->triangle_count; i++) {
                 Triangle *tri = &world->triangles[i];
                 double sx = ((double)x + 0.5) - (double)photo->w / 2.0;
                 double sy = (((double)y + 0.5) - (double)photo->h / 2.0) * 2.0;
                 double dx = yaw + atan(sx / cam->pos.fov);
                 double dy = pitch + atan(sy / cam->pos.fov);
-                double dis = get_distance(cam, tri, dx, dy);
+                double dis = get_distance(cam, world, tri, dx, dy);
                 if (dis >= 0 && dis < next_dis) {
                     next_dis = dis;
                     color = tri->color;
-                    palette = tri->palette;
+                    texture = tri->texture;
                 }
             }
             U8 value = (U8)next_dis;
@@ -87,15 +89,15 @@ void take_photo(Photo *photo, const Camera *cam, const World *world) {
             if (next_dis < 0) {
                 pixel->value = 0;
                 pixel->color = 0;
-                pixel->palette = 0;
+                pixel->texture = 0;
             } else if (next_dis >= 255.0) {
                 pixel->value = 255;
                 pixel->color = 4;
-                pixel->palette = 0;
+                pixel->texture = 0;
             } else {
                 pixel->value = value;
                 pixel->color = color;
-                pixel->palette = palette;
+                pixel->texture = texture;
             }
         }
     }

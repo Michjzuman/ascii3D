@@ -6,18 +6,23 @@ World init_world() {
     World world;
     world.triangle_count = 0;
     world.triangles = malloc(0);
+    world.corners.list = malloc(0);
+    world.corners.count = 0;
     return world;
 }
 
 void free_world(World *world) {
-    for (U32 i = 0; i < world->triangle_count; i++) {
-        P *corners[] = {
-            world->triangles[i].A, world->triangles[i].B, world->triangles[i].C
-        };
-        for (U32 c = 0; c < 3; c++) {
-            // todo
-        }
-    }
+    free(world->triangles);
+    free(world->corners.list);
+}
+
+pCorner corner_malloc(World *world, pCorner count) {
+    pCorner result = world->corners.count;
+    world->corners.count += count;
+    world->corners.list = realloc(
+        world->corners.list, world->corners.count * sizeof(P)
+    );
+    return result;
 }
 
 void add_body(World *world, const Triangle *triangles, const U32 triangle_count) {
