@@ -3,8 +3,8 @@
 #include <stdio.h>
 
 #include "graphics/ascii.h"
-#include "graphics/textures.h"
-#include "graphics/colors.h"
+#include "graphics/texture.h"
+#include "graphics/color.h"
 #include "graphics/photo.h"
 
 void init_ascii() {
@@ -21,13 +21,14 @@ void init_ascii() {
 }
 
 static char get_fitting_letter(U8 value, U8 texture) {
+    Texture t = textures[texture];
     Letter results[16] = {0};
     U8 result_count = 0;
     U8 best = 0;
-    for (U8 i = 0; i < textures[texture].count; i++) {
+    for (U8 i = 0; i < t.count; i++) {
         int current = best - value;
-        int bias = (rand() % 3 - 1) * 0;
-        Letter letter = textures[texture].letters[i];
+        int bias = (rand() % 3 - 1) * t.jitter;
+        Letter letter = t.letters[i];
         int this_one = letter.value - value + bias;
         if (abs(current) > abs(this_one)) {
             best = letter.value;
@@ -38,7 +39,7 @@ static char get_fitting_letter(U8 value, U8 texture) {
             result_count++;
         }
     }
-    if (result_count == 0) return textures[texture].letters[0].ch;
+    if (result_count == 0) return t.letters[0].ch;
     return results[rand() % result_count].ch;
 }
 

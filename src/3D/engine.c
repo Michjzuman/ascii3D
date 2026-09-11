@@ -4,15 +4,15 @@
 
 World init_world() {
     World world;
-    world.triangle_count = 0;
-    world.triangles = malloc(0);
-    world.corners.list = malloc(0);
+    world.triangles.count = 0;
+    world.triangles.list = malloc(0);
     world.corners.count = 0;
+    world.corners.list = malloc(0);
     return world;
 }
 
 void free_world(World *world) {
-    free(world->triangles);
+    free(world->triangles.list);
     free(world->corners.list);
 }
 
@@ -25,13 +25,15 @@ pCorner corner_malloc(World *world, pCorner count) {
     return result;
 }
 
-void add_body(World *world, const Triangle *triangles, const U32 triangle_count) {
-    world->triangles = realloc(
-        world->triangles,
-        (world->triangle_count + triangle_count) * sizeof(Triangle)
+TriangleStack merge_bodies(TriangleStack a, TriangleStack b) {
+    TriangleStack result;
+    result.count = a.count + b.count;
+    result.list = realloc(
+        a.list, result.count * sizeof(Triangle)
     );
-    for (U32 i = 0; i < triangle_count; i++) {
-        world->triangles[world->triangle_count + i] = triangles[i];
+    for (U32 i = 0; i < b.count; i++) {
+        result.list[a.count + i] = b.list[i];
     }
-    world->triangle_count += triangle_count;
+    free(b.list);
+    return result;
 }

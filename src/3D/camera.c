@@ -71,8 +71,8 @@ void take_photo(Photo *photo, const Camera *cam, const World *world) {
             double next_dis = DBL_MAX;
             U8 color = 1;
             U8 texture = 0;
-            for (U32 i = 0; i < world->triangle_count; i++) {
-                Triangle *tri = &world->triangles[i];
+            for (U32 i = 0; i < world->triangles.count; i++) {
+                Triangle *tri = &world->triangles.list[i];
                 double sx = ((double)x + 0.5) - (double)photo->w / 2.0;
                 double sy = (((double)y + 0.5) - (double)photo->h / 2.0) * 2.0;
                 double dx = yaw + atan(sx / cam->pos.fov);

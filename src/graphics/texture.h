@@ -10,11 +10,10 @@ typedef struct {
 
 typedef struct {
     U8 count;
+    U8 jitter;
     Letter *letters;
 } Texture;
 
 extern Texture textures[20];
-
-void init_textures(void);
 
 #endif

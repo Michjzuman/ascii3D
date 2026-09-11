@@ -20,15 +20,17 @@ typedef struct {
 } Triangle;
 
 typedef struct {
-    Triangle *triangles;
-    U32 triangle_count;
+    Triangle *list;
+    U64 count;
+} TriangleStack;
+
+typedef struct {
+    TriangleStack triangles;
     CornerStack corners;
 } World;
 
-World init_world(void);
+World init_world();
 void free_world(World *);
-
-void add_body(World *, const Triangle *triangles, const U32 triangle_count);
 
 pCorner corner_malloc(World *, pCorner count);
 
