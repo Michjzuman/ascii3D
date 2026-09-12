@@ -3,4 +3,4 @@ ascii3D
 ascii3D.dSYM
 __pycache__
 .vscode
-debug.log
+*.log

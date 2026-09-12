@@ -8,11 +8,19 @@
 
 Camera init_cam() {
     Camera cam;
-    cam.vel.x = 0.0f;
-    cam.vel.y = 0.0f;
-    cam.vel.z = 0.0f;
+    cam.vel.pos.x = 0.0f;
+    cam.vel.pos.y = 0.0f;
+    cam.vel.pos.z = 0.0f;
     cam.vel.yaw = 0.0f;
     return cam;
+}
+
+P sub_P(P a, P b) {
+    P result;
+    result.x = a.x - b.x;
+    result.y = a.y - b.y;
+    result.z = a.z - b.z;
+    return result;
 }
 
 static double get_distance(const Camera *cam, const World *world, const Triangle *tri, double dx, double dy) {
@@ -23,14 +31,9 @@ static double get_distance(const Camera *cam, const World *world, const Triangle
 
     P *c = world->corners.list;
 
-    P kat1;
-    kat1.x = c[tri->B].x - c[tri->A].x;
-    kat1.y = c[tri->B].y - c[tri->A].y;
-    kat1.z = c[tri->B].z - c[tri->A].z;
-    P kat2;
-    kat2.x = c[tri->C].x - c[tri->A].x;
-    kat2.y = c[tri->C].y - c[tri->A].y;
-    kat2.z = c[tri->C].z - c[tri->A].z;
+    P kat1 = sub_P(c[tri->B], c[tri->A]);
+    P kat2 = sub_P(c[tri->C], c[tri->A]);
+
     P hyp;
     hyp.x = dir.y * kat2.z - dir.z * kat2.y;
     hyp.y = dir.z * kat2.x - dir.x * kat2.z;
@@ -41,10 +44,7 @@ static double get_distance(const Camera *cam, const World *world, const Triangle
 
     double f = 1.0f / det;
 
-    P s;
-    s.x = cam->pos.x - c[tri->A].x;
-    s.y = cam->pos.y - c[tri->A].y;
-    s.z = cam->pos.z - c[tri->A].z;
+    P s = sub_P(cam->pos.pos, c[tri->A]);
 
     double u = f * (s.x * hyp.x + s.y * hyp.y + s.z * hyp.z);
     if (u < 0.0f || u > 1.0f) return  -1.0;
@@ -64,8 +64,8 @@ static double get_distance(const Camera *cam, const World *world, const Triangle
 }
 
 void take_photo(Photo *photo, const Camera *cam, const World *world) {
-    double yaw = atan2(cam->pos.dz, cam->pos.dx);
-    double pitch = atan2(cam->pos.dy, hypot(cam->pos.dx, cam->pos.dz));
+    double yaw = atan2(cam->pos.dir.z, cam->pos.dir.x);
+    double pitch = atan2(cam->pos.dir.y, hypot(cam->pos.dir.x, cam->pos.dir.z));
     for (U32 x = 0; x < photo->w; x++) {
         for (U32 y = 0; y < photo->h; y++) {
             double next_dis = DBL_MAX;

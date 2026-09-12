@@ -34,4 +34,6 @@ void free_world(World *);
 
 pCorner corner_malloc(World *, pCorner count);
 
+#include "3D/body.h"
+
 #endif

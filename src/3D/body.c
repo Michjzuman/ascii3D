@@ -1,6 +1,5 @@
 #include "3D/engine.h"
 #include "graphics/color.h"
-#include "3D/body.h"
 
 TriangleStack finish_tri_body(
     pCorner p1, pCorner p2, pCorner p3,

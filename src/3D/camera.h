@@ -7,11 +7,13 @@
 #include "3D/engine.h"
 
 typedef struct {
-    double x, y, z, dx, dy, dz, fov;
+    P pos, dir;
+    double fov;
 } CameraPosition;
 
 typedef struct {
-    double x, y, z, yaw;
+    P pos;
+    double yaw;
 } CameraVelocity;
 
 typedef struct {

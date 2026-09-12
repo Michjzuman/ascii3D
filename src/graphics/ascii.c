@@ -55,12 +55,12 @@ void draw_ascii(const Photo *photo, Camera *cam) {
             attroff(COLOR_PAIR(color));
         }
     }
-    mvprintw(0, 0, "x: %f", cam->pos.x);
-    mvprintw(1, 0, "y: %f", cam->pos.y);
-    mvprintw(2, 0, "z: %f", cam->pos.z);
-    mvprintw(3, 0, "dx: %f", cam->pos.dx);
-    mvprintw(4, 0, "dy: %f", cam->pos.dy);
-    mvprintw(5, 0, "dz: %f", cam->pos.dz);
+    mvprintw(0, 0, "x: %f", cam->pos.pos.x);
+    mvprintw(1, 0, "y: %f", cam->pos.pos.y);
+    mvprintw(2, 0, "z: %f", cam->pos.pos.z);
+    mvprintw(3, 0, "dx: %f", cam->pos.dir.x);
+    mvprintw(4, 0, "dy: %f", cam->pos.dir.y);
+    mvprintw(5, 0, "dz: %f", cam->pos.dir.z);
     refresh();
 }
 
